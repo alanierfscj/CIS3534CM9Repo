@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 #networkFileRW.py
-#Pamela Brauda
-#Thursday, March 3, 2022
+#Ashley Lanier
+#4/2/2023
 #Update routers and switches;
 #read equipment from a file, write updates & errors to file
 
 ##---->>>> Use a try/except clause to import the JSON module
-
-
+try:
+    import json
+except ImportError:
+    print("Module import failed.")
 
 ##---->>>> Create file constants for the file names; file constants can be reused
 ##         There are 2 files to read this program: equip_r.txt and equip_s.txt
 ##         There are 2 files to write in this program: updated.txt and errors.txt
-      
-
-
-
+EQUIP_R = 'equip_r.txt'
+EQUIP_S = 'equip_s.txt'
+UPDATED = 'updated.txt'
+INVALID = 'invalid.txt'
 
 #prompt constants
 UPDATE = "\nWhich device would you like to update "
@@ -60,20 +62,17 @@ def getValidIP(invalidIPCount, invalidIPAddresses):
 def main():
 
     ##---->>>> open files here
-
-
-
+    r = open(EQUIP_R)
+    s = open(EQUIP_S)
     
     #dictionaries
     ##---->>>> read the routers and addresses into the router dictionary
-
     routers = {}
-
+    routers = json.load(r)
 
     ##---->>>> read the switches and addresses into the switches dictionary
-
     switches = {}
-
+    switches = json.load(s)
 
     #the updated dictionary holds the device name and new ip address
     updated = {}
@@ -131,21 +130,18 @@ def main():
     print("Number of devices updated:", devicesUpdatedCount)
 
     ##---->>>> write the updated equipment dictionary to a file
-
+    with open(UPDATED, 'w') as f:
+        json.dump(updated, f)
     
     print("Updated equipment written to file 'updated.txt'")
-    print()
     print("\nNumber of invalid addresses attempted:", invalidIPCount)
 
     ##---->>>> write the list of invalid addresses to a file
-    
+    with open(INVALID, 'w') as f:
+        json.dump(invalidIPAddresses, f)
 
     print("List of invalid addresses written to file 'errors.txt'")
 
 #top-level scope check
 if __name__ == "__main__":
     main()
-
-
-
-
